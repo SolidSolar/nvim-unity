@@ -10,18 +10,21 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Compilation;
 using Debug = UnityEngine.Debug;
-
+    
 namespace NvimUnity
 {
     public static class Project
     {
         private static string ProjectRoot => NeovimEditor.RootFolder;
-        private static string TemplatesPath => Utils.NormalizePath(Path.GetFullPath("Packages/com.apyra.nvim-unity/Editor/Templates"));
+        private static string TemplatesPath { get; set; }
 
         private static string csprojPath;
         private static HashSet<string> toCompile = new HashSet<string>(); 
-
+    
         public static bool addProjectToSolution = true;
+
+        private const string TemplatesPackagePath = "Packages/com.apyra.nvim-unity/Editor/Templates";  
+        private const string TemplatesAssetsPath = "Assets/nvim-unity/Editor/Templates";
 
         public static List<string> supportedFiles = 
             new List<string> {
@@ -39,6 +42,19 @@ namespace NvimUnity
         static Project ()
         {
             csprojPath = Path.Combine(ProjectRoot, "Assembly-CSharp.csproj");
+			
+			//change template path depedning on the way plugin been imported
+			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(assembly);
+			if (packageInfo != null)
+			{
+				TemplatesPath = Utils.NormalizePath(Path.GetFullPath(TemplatesPackagePath));
+			}
+			else
+			{
+				TemplatesPath = Utils.NormalizePath(Path.GetFullPath(TemplatesAssetsPath));
+			}
+
             if(Exists())
             GetCompileIncludes();
         }
