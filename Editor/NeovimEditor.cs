@@ -72,7 +72,7 @@ namespace NvimUnity
 
                         if(debugging)
                         UnityEngine.Debug.Log($"[NvimUnity] Executing: {psi.FileName} {psi.Arguments}");
-                        Process.Start(defaultApp, $"{path} {line} {config.neovimLocation}");
+                        Process.Start(defaultApp, $"\"{path}\" {line} \"{config.neovimLocation}\"");
 #endif
                     }
                     else
