@@ -148,8 +148,12 @@ namespace NvimUnity
 
         public static bool HasFilesBeenDeletedOrMoved()
         {
+#if UNITY_6000_0_OR_NEWER
             return toCompile.Any(file => !AssetDatabase.AssetPathExists(file));
-        }
+#else
+            return toCompile.Any(file => !AssetDatabase.LoadAssetAtPath<TextAsset>(file));
+#endif
+		}
 
         public static bool NeedRegenerateCompileIncludes(List<string> files)
         {
