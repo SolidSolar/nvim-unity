@@ -128,7 +128,7 @@ namespace NvimUnity
 
 				process = new Process();
 
-				string focusScriptPath = "C:/sendKeys.bat";
+				string focusScriptPath = Application.dataPath + "/nvim-unity/sendKeys.bat";
 				string focusArgs = $"\"{defaultApp}\" \"\"";
 				// Stop the process from opening a new window
 				process.StartInfo.RedirectStandardOutput = true;
