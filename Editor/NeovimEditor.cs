@@ -114,18 +114,35 @@ namespace NvimUnity
 				Utils.GetNeovimPath();
 #endif
 
-                var psi = new ProcessStartInfo
-                {
-                    FileName = nvimPath,
-                    Arguments = nvimArgs,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                };
+				Process process = new Process();
 
-                Process.Start(nvimPath, nvimArgs);
-                return true;
-            }
-            catch (Exception ex)
+				// Stop the process from opening a new window
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.CreateNoWindow = true;
+
+				// Setup executable and parameters
+				process.StartInfo.FileName = nvimPath;
+				process.StartInfo.Arguments = nvimArgs;
+				process.Start();
+
+				process = new Process();
+
+				string focusScriptPath = "C:/sendKeys.bat";
+				string focusArgs = $"\"{defaultApp}\" \"\"";
+				// Stop the process from opening a new window
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.CreateNoWindow = true;
+
+				// Setup executable and parameters
+				process.StartInfo.FileName = focusScriptPath;
+				process.StartInfo.Arguments = focusArgs;
+				process.Start();
+
+				return true;
+			}
+			catch (Exception ex)
             {
                 UnityEngine.Debug.LogError($"[NvimUnity] Failed to start App: {ex.Message}");
                 return false;
